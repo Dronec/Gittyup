@@ -3,11 +3,6 @@
 ---
 name: Gittyup
 on:
-  push:
-    branches:
-    - libgit2update
-  pull_request:
-  page_build:
   workflow_dispatch:
 
 env:
