@@ -1,7 +1,3 @@
-add_compile_options(-Wall -Wextra)
-if(NOT ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"))
-    message(FATAL_ERROR "Requires either GCC or Clang")
-endif()
 if(NOT USE_SYSTEM_GIT)
   set(PATH ${CMAKE_CURRENT_SOURCE_DIR}/git/contrib/credential)
 
