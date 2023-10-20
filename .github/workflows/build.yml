@@ -208,6 +208,12 @@ jobs:
         with:
           arch: ${{ matrix.env.msvc_arch }}
 
+      - name: Set up Clang
+        uses: egor-tensin/setup-clang@v1
+        with:
+          version: latest
+          platform: x64
+
       - name: Install NASM
         if: matrix.env.ninja_platform == 'win'
         uses: ilammy/setup-nasm@v1.2.0
