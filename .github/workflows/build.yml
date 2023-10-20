@@ -5,9 +5,7 @@ name: Gittyup
 on:
   push:
     branches:
-    - master
-    tags:
-    - 'gittyup_v*'
+    - libgit2update
   pull_request:
   page_build:
   workflow_dispatch:
@@ -133,22 +131,6 @@ jobs:
             check_only: true
 
         env:
-          - name: linux
-            os: ubuntu-latest
-            ninja_platform: linux
-            qt_platform: linux
-            openssl_arch: linux-x86_64
-            cmake_flags: "-DGENERATE_APPDATA=ON"
-            cmake_env: {}
-
-          - name: macos
-            os: macos-latest
-            ninja_platform: mac
-            qt_platform: mac
-            openssl_arch: darwin64-x86_64-cc
-            cmake_env: {}
-            pack: 1
-
           - name: win64
             os: windows-latest
             ninja_platform: win
@@ -162,23 +144,6 @@ jobs:
               CMAKE_RC_FLAGS: "/C 1252"
               CC: clang
               CXX: clang++
-            pack: 1
-
-          - name: win32
-            os: windows-latest
-            ninja_platform: win
-            qt_platform: windows
-            qt_arch: win32_msvc2019
-            qt_arch_check_only: win32_msvc2017
-            openssl_arch: VC-WIN32
-            msvc_arch: x86
-            cmake_flags: "-DUSE_BUNDLED_ZLIB=1"
-            cmake_env:
-              CMAKE_RC_FLAGS: "/C 1252"
-              CC: clang
-              CXX: clang++
-              CMAKE_C_FLAGS: -m32
-              CMAKE_CXX_FLAGS: -m32
             pack: 1
 
     steps:
@@ -378,31 +343,9 @@ jobs:
             **/artifacts/Gittyup Flatpak/com.github.Murmele.Gittyup.yml
             **/Gittyup-x86_64/*.flatpak
 
-      - name: Update GitHub release (version tag)
-        uses: marvinpinto/action-automatic-releases@latest
-        if: ${{ env.IS_RELEASE == 'true'}}
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          prerelease: false
-          title: Gittyup Release ${{ steps.version.outputs.VERSION }}
-          automatic_release_tag: ${{ github.ref_name }}
-          files: |
-            **/artifacts/Gittyup win64/Gittyup*.exe
-            **/artifacts/Gittyup win32/Gittyup*.exe
-            **/artifacts/Gittyup macos/Gittyup*.dmg
-            **/artifacts/Gittyup Flatpak/com.github.Murmele.Gittyup.yml
-            **/Gittyup-x86_64/*.flatpak
-
       # needed otherwise the docs folder is not available     
       - name: Checkout repository
         if: ${{ env.IS_RELEASE == 'true'}}
         uses: actions/checkout@v3
-
-      # update github pages only if it is a release 
-      - name: Deploy Github pages
-        if: ${{ env.IS_RELEASE  == 'true'}}
-        uses: JamesIves/github-pages-deploy-action@v4.4.0
-        with:
-          branch: gh-pages # The branch the action should deploy to.
           folder: docs # The folder the action should deploy.
 ...
